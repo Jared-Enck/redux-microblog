@@ -1,3 +1,12 @@
+import { Typography } from '@mui/material';
+
 export default function Home() {
-  return <h1>Microblog</h1>;
+  return (
+    <Typography
+      variant='h3'
+      sx={{ color: 'primary.text' }}
+    >
+      Microblog
+    </Typography>
+  );
 }
