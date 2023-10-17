@@ -30,7 +30,29 @@ const CancelButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-export default function PostForm({ type = 'New' }) {
+const StyledInput = styled(TextField)(({ theme }) => ({
+  width: '100%',
+  backgroundColor: theme.palette.primary.light,
+  borderRadius: '.3rem',
+  '& .MuiInputBase-root': {
+    border: '2px solid transparent',
+    transition: '150ms ease-out',
+    color: theme.palette.primary.text,
+    '&:hover': {
+      backgroundColor: theme.palette.primary.lightest,
+      borderRadius: '.3rem',
+      border: `2px solid ${theme.palette.secondary.main}`,
+      transition: '150ms ease-in',
+    },
+  },
+  '& .Mui-focused': {
+    backgroundColor: theme.palette.primary.lightest,
+    borderRadius: '.3rem',
+    border: `2px solid ${theme.palette.secondary.main}`,
+  },
+}));
+
+export default function PostForm({ type = 'New', setOpen }) {
   const initialState = {
     title: '',
     description: '',
@@ -50,6 +72,10 @@ export default function PostForm({ type = 'New' }) {
     e.preventDefault();
     console.log(formData);
     setFormData(initialState);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -77,25 +103,19 @@ export default function PostForm({ type = 'New' }) {
               >
                 {label}
               </FormLabel>
-              <TextField
+              <StyledInput
                 name={input}
                 value={formData[input]}
                 onChange={handleChange}
                 multiline={idx === 2}
                 rows={idx === 2 ? 5 : null}
                 required
-                sx={{
-                  width: '100%',
-                  bgcolor: 'primary.light',
-                  borderRadius: 1,
-                  '& .MuiInputBase-input': {
-                    color: 'primary.text',
-                  },
-                }}
+                autoFocus={idx === 0}
               />
             </div>
           );
         })}
+
         <Stack
           direction='row'
           spacing={1}
@@ -106,9 +126,19 @@ export default function PostForm({ type = 'New' }) {
           >
             Save
           </SaveButton>
-          <Link href={'/'}>
-            <CancelButton variant='outlined'>Cancel</CancelButton>
-          </Link>
+
+          {type === 'Edit' ? (
+            <CancelButton
+              onClick={handleClose}
+              variant='outlined'
+            >
+              Cancel
+            </CancelButton>
+          ) : (
+            <Link href={'/'}>
+              <CancelButton variant='outlined'>Cancel</CancelButton>
+            </Link>
+          )}
         </Stack>
       </Stack>
     </form>
