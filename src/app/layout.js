@@ -1,7 +1,9 @@
 import { Roboto } from 'next/font/google';
 import './globals.css';
-
 const roboto = Roboto({ weight: '400', subsets: ['latin'] });
+import Navbar from './components/Navbar';
+import { ThemeProvider } from '@mui/material/styles';
+import { theme } from './theme';
 
 export const metadata = {
   title: 'Redux Microblog',
@@ -11,7 +13,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang='en'>
-      <body className={roboto.className}>{children}</body>
+      <body className={roboto.className}>
+        <ThemeProvider theme={theme}>
+          <Navbar />
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
