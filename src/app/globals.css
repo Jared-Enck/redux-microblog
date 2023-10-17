@@ -95,7 +95,7 @@ body {
     rgb(var(--background-start-rgb));
 }
 
-.main {
+main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
