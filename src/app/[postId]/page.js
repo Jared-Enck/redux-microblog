@@ -8,6 +8,8 @@ import {
   IconButton,
   Stack,
   Grid,
+  Divider,
+  Box,
 } from '@mui/material';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
@@ -50,7 +52,7 @@ export default function PostView() {
           sx={{
             color: 'primary.text',
           }}
-          spacing={4}
+          spacing={5}
         >
           <Grid
             container
@@ -108,6 +110,13 @@ export default function PostView() {
           </Grid>
 
           <Typography sx={{ fontSize: '1.2rem' }}>Blog body</Typography>
+
+          <Stack spacing={2}>
+            <Box>
+              <Typography variant='h5'>Comments</Typography>
+              <Divider sx={{ bgcolor: 'primary.light', margin: '1rem' }} />
+            </Box>
+          </Stack>
         </Stack>
       </Container>
     </>
