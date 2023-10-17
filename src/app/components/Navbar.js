@@ -29,7 +29,15 @@ export default function Navbar() {
           >
             <IconButton>
               <PostAdd
-                sx={{ color: 'primary.text', transform: 'scale(1.3)' }}
+                sx={{
+                  color: 'primary.text',
+                  transform: 'scale(1.3)',
+                  transition: '150ms ease-out',
+                  '&:hover': {
+                    color: 'secondary.main',
+                    transition: '150ms ease-in',
+                  },
+                }}
               />
             </IconButton>
           </Link>
