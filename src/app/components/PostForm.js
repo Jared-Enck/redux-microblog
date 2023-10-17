@@ -21,9 +21,10 @@ const SaveButton = styled(Button)(({ theme }) => ({
 }));
 
 const CancelButton = styled(Button)(({ theme }) => ({
-  color: theme.palette.primary.text,
-  borderColor: theme.palette.secondary.main,
+  color: theme.palette.primary.lightest,
+  borderColor: theme.palette.primary.lightest,
   '&:hover': {
+    color: theme.palette.primary.text,
     borderColor: theme.palette.secondary.main,
     backgroundColor: theme.palette.secondary.main,
   },
