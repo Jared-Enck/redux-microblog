@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
       <body className={roboto.className}>
         <ThemeProvider theme={theme}>
           <Navbar />
-          {children}
+          <main className='main'>{children}</main>
         </ThemeProvider>
       </body>
     </html>
