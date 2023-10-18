@@ -1,6 +1,7 @@
 import React from 'react';
 import { Stack, Divider, Box, Typography } from '@mui/material';
 import CommentItem from './CommentItem';
+import CommentForm from './CommentForm';
 
 const comments = [
   { id: '1', text: 'dis a comment' },
@@ -35,6 +36,7 @@ export default function CommentList() {
           );
         })}
       </Box>
+      <CommentForm />
     </Stack>
   );
 }
