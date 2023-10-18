@@ -5,6 +5,8 @@ import Navbar from './components/Navbar';
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from './theme';
 import { CssBaseline } from '@mui/material';
+import { store } from '@/redux/store';
+import ReduxProvider from '@/redux/ReduxProvider';
 
 export const metadata = {
   title: 'Redux Microblog',
@@ -18,7 +20,9 @@ export default function RootLayout({ children }) {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Navbar />
-          <main>{children}</main>
+          <ReduxProvider store={store}>
+            <main>{children}</main>
+          </ReduxProvider>
         </ThemeProvider>
       </body>
     </html>
