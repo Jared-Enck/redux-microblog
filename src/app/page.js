@@ -35,16 +35,27 @@ export default function Home() {
         spacing={2}
         justifyContent={'space-around'}
       >
-        {blogs.map((b) => (
-          <Grid
-            key={b.id}
-            item
-            xs={12}
-            sm={5}
-          >
-            <PostCard post={b} />
+        {blogs.length ? (
+          blogs.map((b) => (
+            <Grid
+              key={b.id}
+              item
+              xs={12}
+              sm={5}
+            >
+              <PostCard post={b} />
+            </Grid>
+          ))
+        ) : (
+          <Grid item>
+            <Typography
+              variant='h5'
+              color={'primary.text'}
+            >
+              Loading...
+            </Typography>
           </Grid>
-        ))}
+        )}
       </Grid>
     </Container>
   );
