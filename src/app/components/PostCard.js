@@ -14,7 +14,7 @@ export default function PostCard({ post }) {
           color: 'primary.muted',
         },
         '&:hover': {
-          transform: 'scale(1.03)',
+          transform: 'scale(1.01)',
           transition: '150ms ease-in',
         },
       }}
