@@ -1,24 +1,11 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import {
-  Typography,
-  TextField,
-  FormLabel,
-  Stack,
-  Button,
-  alpha,
-} from '@mui/material';
+import { Typography, FormLabel, Stack, Button } from '@mui/material';
 import styled from '@emotion/styled';
 import { theme } from '../theme';
-
-const SaveButton = styled(Button)(({ theme }) => ({
-  backgroundColor: theme.palette.secondary.main,
-  color: theme.palette.primary.text,
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.secondary.main, 0.8),
-  },
-}));
+import { StyledInput, PrimaryButton } from '../styled';
+import useFields from '../hooks/useFields';
 
 const CancelButton = styled(Button)(({ theme }) => ({
   color: theme.palette.primary.lightest,
@@ -30,43 +17,13 @@ const CancelButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const StyledInput = styled(TextField)(({ theme }) => ({
-  width: '100%',
-  backgroundColor: theme.palette.primary.light,
-  borderRadius: '.3rem',
-  '& .MuiInputBase-root': {
-    border: '2px solid transparent',
-    transition: '150ms ease-out',
-    color: theme.palette.primary.text,
-    '&:hover': {
-      backgroundColor: theme.palette.primary.lightest,
-      borderRadius: '.3rem',
-      border: `2px solid ${theme.palette.secondary.main}`,
-      transition: '150ms ease-in',
-    },
-  },
-  '& .Mui-focused': {
-    backgroundColor: theme.palette.primary.lightest,
-    borderRadius: '.3rem',
-    border: `2px solid ${theme.palette.secondary.main}`,
-  },
-}));
-
 export default function PostForm({ type = 'New', setOpen }) {
   const initialState = {
     title: '',
     description: '',
     body: '',
   };
-  const [formData, setFormData] = useState(initialState);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((fdata) => ({
-      ...fdata,
-      [name]: value,
-    }));
-  };
+  const [formData, handleChange, setFormData] = useFields(initialState);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -120,12 +77,12 @@ export default function PostForm({ type = 'New', setOpen }) {
           direction='row'
           spacing={1}
         >
-          <SaveButton
+          <PrimaryButton
             variant='contained'
             type='submit'
           >
             Save
-          </SaveButton>
+          </PrimaryButton>
 
           {type === 'Edit' ? (
             <CancelButton
