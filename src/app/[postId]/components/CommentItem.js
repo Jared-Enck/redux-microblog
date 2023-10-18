@@ -8,9 +8,13 @@ import {
 } from '@mui/material';
 import { DeleteForever } from '@mui/icons-material';
 
-export default function CommentItem({ comment }) {
-  const handleDeleteClick = (id) =>
-    console.log('deleting comment: ', comment.id);
+export default function CommentItem({ setComments, comment }) {
+  const handleDeleteClick = () => {
+    setComments((prev) => {
+      const next = prev.filter((p) => p.id !== comment.id);
+      return next;
+    });
+  };
   return (
     <ListItem>
       <ListItemText>
