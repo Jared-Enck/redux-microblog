@@ -9,8 +9,13 @@ export default function PostCard({ post }) {
       sx={{
         bgcolor: 'primary.lightest',
         color: 'primary.text',
+        transition: '150ms ease-out',
         '& .MuiCardHeader-subheader': {
           color: 'primary.muted',
+        },
+        '&:hover': {
+          transform: 'scale(1.03)',
+          transition: '150ms ease-in',
         },
       }}
     >
