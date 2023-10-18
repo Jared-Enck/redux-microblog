@@ -1,11 +1,15 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import { Typography, FormLabel, Stack, Button } from '@mui/material';
+import { Typography, FormLabel, Stack, Button, Box } from '@mui/material';
 import styled from '@emotion/styled';
 import { theme } from '../theme';
 import { StyledInput, PrimaryButton } from '../styled';
 import useFields from '../hooks/useFields';
+import { useDispatch } from 'react-redux';
+import { addPost } from '@/redux/reducers/postSlice';
+import { useRouter } from 'next/navigation';
+import uuid from 'react-uuid';
 
 const CancelButton = styled(Button)(({ theme }) => ({
   color: theme.palette.primary.lightest,
@@ -18,17 +22,22 @@ const CancelButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function PostForm({ type = 'New', setOpen }) {
+  const dispatch = useDispatch();
+  const { push } = useRouter();
   const initialState = {
     title: '',
     description: '',
     body: '',
   };
-  const [formData, handleChange, setFormData] = useFields(initialState);
+  const [formData, handleChange] = useFields(initialState);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
-    setFormData(initialState);
+    if (type === 'New') {
+      const payload = { id: uuid(), post: formData };
+      dispatch(addPost(payload));
+      push('/');
+    }
   };
 
   const handleClose = () => {
@@ -53,7 +62,7 @@ export default function PostForm({ type = 'New', setOpen }) {
           const label = input.charAt(0).toUpperCase() + input.slice(1);
 
           return (
-            <div key={idx}>
+            <Box key={idx}>
               <FormLabel
                 htmlFor={input}
                 sx={{ color: 'primary.text' }}
@@ -69,7 +78,7 @@ export default function PostForm({ type = 'New', setOpen }) {
                 required
                 autoFocus={idx === 0}
               />
-            </div>
+            </Box>
           );
         })}
 

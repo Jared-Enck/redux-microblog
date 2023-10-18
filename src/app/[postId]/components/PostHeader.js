@@ -3,7 +3,7 @@ import { Grid, Typography, IconButton } from '@mui/material';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-export default function PostHeader({ isSmall, setOpen }) {
+export default function PostHeader({ post, isSmall, setOpen }) {
   const handleEditClick = () => setOpen(true);
 
   const handleDeleteClick = () => console.log('deleting...');
@@ -21,14 +21,14 @@ export default function PostHeader({ isSmall, setOpen }) {
           variant={isSmall ? 'h5' : 'h4'}
           gutterBottom
         >
-          Really Really Long Blog Title
+          {post.title}
         </Typography>
         <Typography
           variant={isSmall ? 'h6' : 'h5'}
-          color='primary.muted'
+          color='primary.text'
           sx={{ fontStyle: 'italic' }}
         >
-          Blog description
+          {post.description}
         </Typography>
       </Grid>
 

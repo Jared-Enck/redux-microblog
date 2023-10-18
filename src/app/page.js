@@ -1,62 +1,25 @@
-import React from 'react';
-import { Container, Typography, Divider, Grid } from '@mui/material';
-import PostCard from './components/PostCard';
-
-const blog1 = {
-  id: '1A1B',
-  title: 'blog1',
-  description: 'blog1 desc',
-  body: 'blah blah blah',
-};
-
-const blog2 = {
-  id: '2A2B',
-  title: 'blog2',
-  description: 'blog2 desc',
-  body: 'blah blah blah',
-};
-
-const blogs = [blog1, blog2];
+'use client';
+import React, { useEffect } from 'react';
+import { Container, Typography, Divider } from '@mui/material';
+import PostList from './components/PostList';
+import { useSelector, shallowEqual } from 'react-redux';
 
 export default function Home() {
+  const posts = useSelector((store) => store.root.posts, shallowEqual);
+
   return (
     <Container maxWidth='lg'>
       <Typography
-        variant='h3'
+        variant='h4'
+        gutterBottom
         sx={{ color: 'primary.text' }}
       >
         Recent Blogs
       </Typography>
 
-      <Divider sx={{ bgcolor: 'primary.light', margin: '1.5rem' }} />
+      <Divider sx={{ bgcolor: 'primary.light', marginBottom: '1.5rem' }} />
 
-      <Grid
-        container
-        spacing={2}
-        justifyContent={'space-around'}
-      >
-        {blogs.length ? (
-          blogs.map((b) => (
-            <Grid
-              key={b.id}
-              item
-              xs={12}
-              sm={5}
-            >
-              <PostCard post={b} />
-            </Grid>
-          ))
-        ) : (
-          <Grid item>
-            <Typography
-              variant='h5'
-              color={'primary.text'}
-            >
-              Loading...
-            </Typography>
-          </Grid>
-        )}
-      </Grid>
+      <PostList posts={Object.entries(posts)} />
     </Container>
   );
 }
