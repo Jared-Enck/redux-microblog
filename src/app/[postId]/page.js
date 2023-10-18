@@ -52,15 +52,21 @@ export default function PostView() {
           }}
           spacing={5}
         >
-          <PostHeader
-            post={post}
-            isSmall={isSmall}
-            setOpen={setOpen}
-          />
+          {post ? (
+            <>
+              <PostHeader
+                post={post}
+                isSmall={isSmall}
+                setOpen={setOpen}
+              />
 
-          <Typography sx={{ fontSize: '1.2rem' }}>{post.body}</Typography>
+              <Typography sx={{ fontSize: '1.2rem' }}>{post.body}</Typography>
 
-          <CommentList comments={post.comments} />
+              <CommentList comments={post.comments} />
+            </>
+          ) : (
+            <Typography>Loading...</Typography>
+          )}
         </Stack>
       </Container>
     </>
