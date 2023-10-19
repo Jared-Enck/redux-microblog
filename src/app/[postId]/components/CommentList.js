@@ -1,14 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Stack, Divider, Box, Typography } from '@mui/material';
 import CommentItem from './CommentItem';
 import CommentForm from './CommentForm';
 
-export default function CommentList() {
-  const [comments, setComments] = useState([
-    { id: '1', text: 'dis a comment' },
-    { id: '2', text: 'another one' },
-  ]);
-
+export default function CommentList({ comments = [] }) {
   return (
     <Stack spacing={2}>
       <Box>
@@ -33,7 +28,6 @@ export default function CommentList() {
                 }}
               >
                 <CommentItem
-                  setComments={setComments}
                   comment={c}
                   idx={idx}
                 />
@@ -54,10 +48,7 @@ export default function CommentList() {
         <Divider sx={{ bgcolor: 'primary.light', margin: '1rem' }} />
       </Box>
 
-      <CommentForm
-        currLength={comments.length}
-        setComments={setComments}
-      />
+      <CommentForm />
     </Stack>
   );
 }

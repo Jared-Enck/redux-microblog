@@ -3,10 +3,16 @@ import { Grid, Typography, IconButton } from '@mui/material';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
-export default function PostHeader({ post, isSmall, setOpen }) {
+export default function PostHeader({
+  postData,
+  isSmall,
+  setOpen,
+  handleDelete,
+}) {
+  const { postId, title, description } = postData;
+
   const handleEditClick = () => setOpen(true);
 
-  const handleDeleteClick = () => console.log('deleting...');
   return (
     <Grid
       container
@@ -21,14 +27,14 @@ export default function PostHeader({ post, isSmall, setOpen }) {
           variant={isSmall ? 'h5' : 'h4'}
           gutterBottom
         >
-          {post.title}
+          {title}
         </Typography>
         <Typography
           variant={isSmall ? 'h6' : 'h5'}
           color='primary.text'
           sx={{ fontStyle: 'italic' }}
         >
-          {post.description}
+          {description}
         </Typography>
       </Grid>
 
@@ -51,7 +57,7 @@ export default function PostHeader({ post, isSmall, setOpen }) {
             }}
           />
         </IconButton>
-        <IconButton onClick={handleDeleteClick}>
+        <IconButton onClick={() => handleDelete(postId)}>
           <DeleteForeverIcon
             sx={{
               color: 'primary.text',

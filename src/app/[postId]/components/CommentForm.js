@@ -2,7 +2,7 @@ import { Stack, InputLabel } from '@mui/material';
 import useFields from '@/app/hooks/useFields';
 import { StyledInput, PrimaryButton } from '@/app/styled';
 
-export default function CommentForm({ currLength, setComments }) {
+export default function CommentForm() {
   const initialState = {
     text: '',
   };
@@ -10,10 +10,7 @@ export default function CommentForm({ currLength, setComments }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setComments((prev) => [
-      ...prev,
-      { id: `${currLength + 1}`, text: formData.text },
-    ]);
+    console.log(formData.text);
     setFormData(initialState);
   };
 
