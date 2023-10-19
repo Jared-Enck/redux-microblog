@@ -21,6 +21,7 @@ export default function PostView() {
 
   const { postId } = useParams();
   const posts = useSelector((store) => store.root.posts, shallowEqual);
+
   const post = posts[postId];
 
   const handleClose = () => setOpen(false);
@@ -65,7 +66,14 @@ export default function PostView() {
               <CommentList comments={post.comments} />
             </>
           ) : (
-            <Typography>Loading...</Typography>
+            <Typography
+              variant={isSmall ? 'h5' : 'h4'}
+              sx={{
+                textAlign: 'center',
+              }}
+            >
+              Sorry, can't find the post you're looking for.
+            </Typography>
           )}
         </Stack>
       </Container>
