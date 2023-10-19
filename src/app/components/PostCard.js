@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Card, CardActionArea, CardHeader } from '@mui/material';
 
 export default function PostCard({ post }) {
-  const { title, description } = post[1];
+  const { title, description, votes } = post;
   return (
     <Card
       sx={{
@@ -21,7 +21,7 @@ export default function PostCard({ post }) {
       }}
     >
       <CardActionArea>
-        <Link href={`/${post[0]}`}>
+        <Link href={`/${post.id}`}>
           <CardHeader
             title={title}
             subheader={description}
