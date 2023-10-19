@@ -7,7 +7,8 @@ import { theme } from '../theme';
 import { StyledInput, PrimaryButton } from '../styled';
 import useFields from '../hooks/useFields';
 import { useDispatch } from 'react-redux';
-import { addPost } from '@/redux/reducers/postSlice';
+import { addPost, updatePost } from '@/redux/reducers/postSlice';
+import getPostChanges from '../helpers/getPostChanges';
 import { useRouter } from 'next/navigation';
 import uuid from 'react-uuid';
 
@@ -21,15 +22,21 @@ const CancelButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-export default function PostForm({ type = 'New', setOpen }) {
+export default function PostForm({ type = 'New', setOpen, postData }) {
   const dispatch = useDispatch();
   const { push } = useRouter();
-  const initialState = {
-    title: '',
-    description: '',
-    body: '',
-  };
+  const initialState = postData
+    ? postData.post
+    : {
+        title: '',
+        description: '',
+        body: '',
+      };
   const [formData, handleChange] = useFields(initialState);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -37,11 +44,16 @@ export default function PostForm({ type = 'New', setOpen }) {
       const payload = { id: uuid(), post: formData };
       dispatch(addPost(payload));
       push('/');
+    } else {
+      const { postId, post } = postData;
+      const changes = getPostChanges(formData, post);
+      if (changes !== -1) {
+        const payload = { postId, changes };
+        console.log('dispatching...', payload);
+        dispatch(updatePost(payload));
+      }
+      handleClose();
     }
-  };
-
-  const handleClose = () => {
-    setOpen(false);
   };
 
   return (
@@ -75,7 +87,7 @@ export default function PostForm({ type = 'New', setOpen }) {
                 onChange={handleChange}
                 multiline={idx === 2}
                 rows={idx === 2 ? 5 : null}
-                required
+                required={type === 'New'}
                 autoFocus={idx === 0}
               />
             </Box>

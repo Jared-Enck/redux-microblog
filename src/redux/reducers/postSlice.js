@@ -33,12 +33,19 @@ export const postSlice = createSlice({
       delete state[action.payload];
     },
 
+    updatePost: (state, action) => {
+      const changes = action.payload.changes;
+      for (let key in changes) {
+        state[action.payload.postId][key] = changes[key];
+      }
+    },
+
     default: (state) => {
       return state;
     },
   },
 });
 
-export const { addPost, removePost } = postSlice.actions;
+export const { addPost, removePost, updatePost } = postSlice.actions;
 
 export default postSlice.reducer;

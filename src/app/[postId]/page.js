@@ -43,6 +43,7 @@ export default function PostView() {
         <PostForm
           type='Edit'
           setOpen={setOpen}
+          postData={{ postId, post }}
         />
       </Dialog>
 
