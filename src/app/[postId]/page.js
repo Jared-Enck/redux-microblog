@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import {
   Container,
@@ -12,19 +12,35 @@ import { useTheme } from '@emotion/react';
 import PostForm from '../components/PostForm';
 import PostHeader from './components/PostHeader';
 import CommentList from './components/CommentList';
-import { useSelector, shallowEqual } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { fetchPost, deletePost } from '@/redux/reducers/postSlice';
+import { useRouter } from 'next/navigation';
 
 export default function PostView() {
+  const dispatch = useDispatch();
+  const { push } = useRouter();
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down('sm'));
   const [open, setOpen] = useState(false);
 
   const { postId } = useParams();
-  const posts = useSelector((store) => store.root.posts, shallowEqual);
 
-  const post = posts[postId];
+  const post = useSelector(
+    (store) => store.root.postReducer.post,
+    shallowEqual
+  );
+  const isLoading = useSelector((state) => state.root.postReducer.isLoading);
+  const error = useSelector((state) => state.root.postReducer.error);
 
   const handleClose = () => setOpen(false);
+
+  const handleDelete = async () => {
+    dispatch(deletePost(postId)).then(() => push('/'));
+  };
+
+  useEffect(() => {
+    dispatch(fetchPost(postId));
+  }, [dispatch]);
 
   return (
     <>
@@ -54,18 +70,34 @@ export default function PostView() {
           }}
           spacing={5}
         >
-          {post ? (
-            <>
-              <PostHeader
-                post={post}
-                isSmall={isSmall}
-                setOpen={setOpen}
-              />
+          {!isLoading ? (
+            error ? (
+              <Typography
+                variant={isSmall ? 'h5' : 'h4'}
+                sx={{
+                  textAlign: 'center',
+                }}
+              >
+                Sorry, can't find the post you're looking for.
+              </Typography>
+            ) : (
+              <>
+                <PostHeader
+                  postData={{
+                    postId,
+                    title: post.title,
+                    description: post.description,
+                  }}
+                  isSmall={isSmall}
+                  setOpen={setOpen}
+                  handleDelete={handleDelete}
+                />
 
-              <Typography sx={{ fontSize: '1.2rem' }}>{post.body}</Typography>
+                <Typography sx={{ fontSize: '1.2rem' }}>{post.body}</Typography>
 
-              <CommentList comments={post.comments} />
-            </>
+                <CommentList comments={post.comments} />
+              </>
+            )
           ) : (
             <Typography
               variant={isSmall ? 'h5' : 'h4'}
@@ -73,7 +105,7 @@ export default function PostView() {
                 textAlign: 'center',
               }}
             >
-              Sorry, can't find the post you're looking for.
+              Loading...
             </Typography>
           )}
         </Stack>
