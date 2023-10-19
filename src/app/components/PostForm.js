@@ -7,10 +7,9 @@ import { theme } from '../theme';
 import { StyledInput, PrimaryButton } from '../styled';
 import useFields from '../hooks/useFields';
 import { useDispatch } from 'react-redux';
-import { addPost, updatePost } from '@/redux/reducers/postSlice';
+import { editPost, savePost } from '@/redux/reducers/postSlice';
 import getPostChanges from '../helpers/getPostChanges';
 import { useRouter } from 'next/navigation';
-import uuid from 'react-uuid';
 
 const CancelButton = styled(Button)(({ theme }) => ({
   color: theme.palette.primary.lightest,
@@ -41,16 +40,14 @@ export default function PostForm({ type = 'New', setOpen, postData }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (type === 'New') {
-      const payload = { id: uuid(), post: formData };
-      dispatch(addPost(payload));
+      dispatch(savePost(formData)).then(() => push('/'));
       push('/');
     } else {
       const { postId, post } = postData;
       const changes = getPostChanges(formData, post);
-      if (changes !== -1) {
-        const payload = { postId, changes };
-        console.log('dispatching...', payload);
-        dispatch(updatePost(payload));
+      if (changes) {
+        const payload = { postId, changes: formData };
+        dispatch(editPost(payload));
       }
       handleClose();
     }

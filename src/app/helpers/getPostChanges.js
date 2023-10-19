@@ -1,15 +1,8 @@
 export default function getPostChanges(formData, postData) {
-  const formEntries = Object.entries(formData);
-  const initialEntries = Object.entries(postData);
-  const updateData = {};
+  const formVals = Object.values(formData);
+  const initialVals = Object.values(postData);
 
-  const entries = formEntries.filter(
-    ([key, val], idx) => val !== initialEntries[idx][1]
-  );
+  const values = formVals.filter((val, idx) => val !== initialVals[idx]);
 
-  if (!entries.length) return -1;
-
-  entries.map((entry) => (updateData[entry[0]] = entry[1]));
-
-  return updateData;
+  return values.length > 0;
 }
