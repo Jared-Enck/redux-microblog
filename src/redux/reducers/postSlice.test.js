@@ -7,7 +7,7 @@ const post1 = {
     title: 'test title',
     description: 'test desc',
     body: 'test body',
-    comments: {},
+    votes: {},
   },
 };
 const post2 = {
@@ -16,29 +16,37 @@ const post2 = {
     title: 'test title2',
     description: 'test desc2',
     body: 'test body2',
-    comments: {},
+    votes: {},
   },
 };
 
 describe('Posts redux state tests for adding post', () => {
   it('Should initially set object of posts', () => {
-    const state = store.getState().root.posts;
-    expect(state).toEqual({ [post1.id]: post1.post, [post2.id]: post2.post });
+    const state = store.getState().root.postsReducer;
+    expect(state).toEqual({ posts: {}, isLoading: false, error: null });
   });
 
   it('Should add post', () => {
-    const previousState = {};
+    const previousState = { posts: {}, isLoading: false, error: null };
     expect(reducer(previousState, addPost(post1))).toEqual({
-      [post1.id]: post1.post,
+      posts: { [post1.id]: post1.post },
+      isLoading: false,
+      error: null,
     });
   });
 });
 
 describe('Posts redux state tests for removing post', () => {
   it('Should remove post based on post id', () => {
-    const previousState = { [post1.id]: post1.post, [post2.id]: post2.post };
+    const previousState = {
+      posts: { [post1.id]: post1.post, [post2.id]: post2.post },
+      isLoading: false,
+      error: null,
+    };
     expect(reducer(previousState, removePost(post1.id))).toEqual({
-      [post2.id]: post2.post,
+      posts: { [post2.id]: post2.post },
+      isLoading: false,
+      error: null,
     });
   });
 });

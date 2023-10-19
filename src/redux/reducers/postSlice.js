@@ -1,51 +1,74 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 
-const post1 = {
-  id: '1p',
-  post: {
-    title: 'test title',
-    description: 'test desc',
-    body: 'test body',
-    comments: {},
-  },
-};
-const post2 = {
-  id: '2p',
-  post: {
-    title: 'test title2',
-    description: 'test desc2',
-    body: 'test body2',
-    comments: {},
-  },
+const BASE_URL = 'http://localhost:5000';
+
+const initialState = {
+  post: {},
+  isLoading: false,
+  error: null,
 };
 
-const initialState = { [post1.id]: post1.post, [post2.id]: post2.post };
+export const fetchPost = createAsyncThunk('post/fetchPost', async (postId) => {
+  try {
+    return (await axios(`${BASE_URL}/api/posts/${postId}`)).data;
+  } catch (err) {
+    console.error(err.response.data.message);
+  }
+});
+
+export const savePost = createAsyncThunk('post/addPost', async (post) => {
+  try {
+    return (await axios.post(`${BASE_URL}/api/posts`, post)).data;
+  } catch (err) {
+    console.error(err.response.data.message);
+  }
+});
+
+export const editPost = createAsyncThunk(
+  'post/editPost',
+  async ({ postId, changes }) => {
+    try {
+      return (await axios.put(`${BASE_URL}/api/posts/${postId}`, changes)).data;
+    } catch (err) {
+      console.error(err.response.data.message);
+    }
+  }
+);
+
+export const deletePost = createAsyncThunk(
+  'post/deletePost',
+  async (postId) => {
+    try {
+      return (await axios.delete(`${BASE_URL}/api/posts/${postId}`)).data;
+    } catch (err) {
+      console.error(err.response.data.message);
+    }
+  }
+);
 
 export const postSlice = createSlice({
-  name: 'posts',
+  name: 'post',
   initialState,
   reducers: {
-    addPost: (state, action) => {
-      state[action.payload.id] = action.payload.post;
-    },
-
-    removePost: (state, action) => {
-      delete state[action.payload];
-    },
-
-    updatePost: (state, action) => {
-      const changes = action.payload.changes;
-      for (let key in changes) {
-        state[action.payload.postId][key] = changes[key];
-      }
-    },
-
     default: (state) => {
       return state;
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(fetchPost.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(fetchPost.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.post = action.payload;
+    });
+    builder.addCase(fetchPost.rejected, (state, action) => {
+      state.isLoading = false;
+      console.log('error');
+      state.error = action.error.message;
+    });
+  },
 });
-
-export const { addPost, removePost, updatePost } = postSlice.actions;
 
 export default postSlice.reducer;
