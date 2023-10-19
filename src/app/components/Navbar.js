@@ -16,7 +16,7 @@ export default function Navbar() {
       position='static'
       sx={{ bgcolor: 'primary.main' }}
     >
-      <Container maxWidth='xl'>
+      <Container maxWidth='lg'>
         <Toolbar>
           <Link href={'/'}>
             <Typography sx={{ fontSize: '1.7rem', color: 'primary.text' }}>
