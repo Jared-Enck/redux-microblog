@@ -1,4 +1,4 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import posts from './postSlice';
+import postsReducer from './postSlice';
 
-export default combineReducers({ posts });
+export default combineReducers({ postsReducer });
