@@ -5,7 +5,8 @@ const BASE_URL = 'http://localhost:5000';
 
 const initialState = {
   post: {},
-  isLoading: false,
+  isLoadingPost: false,
+  isLoadingComments: false,
   error: null,
 };
 
@@ -40,6 +41,48 @@ export const editPost = createAsyncThunk(
   }
 );
 
+export const addComment = createAsyncThunk(
+  'post/addComment',
+  async ({ postId, payload }, thunkAPI) => {
+    try {
+      return (
+        await axios.post(`${BASE_URL}/api/posts/${postId}/comments`, payload)
+      ).data;
+    } catch (err) {
+      console.error('Error: ', err.response.data.message);
+      return thunkAPI.rejectWithValue(err.response.data.message);
+    }
+  }
+);
+
+export const fetchComments = createAsyncThunk(
+  'post/fetchComments',
+  async (postId, thunkAPI) => {
+    try {
+      return (await axios.get(`${BASE_URL}/api/posts/${postId}/comments`)).data;
+    } catch (err) {
+      console.error('Error: ', err.response.data.message);
+      return thunkAPI.rejectWithValue(err.response.data.message);
+    }
+  }
+);
+
+export const deleteComment = createAsyncThunk(
+  'post/deleteComment',
+  async ({ postId, commentId }, thunkAPI) => {
+    try {
+      return (
+        await axios.delete(
+          `${BASE_URL}/api/posts/${postId}/comments/${commentId}`
+        )
+      ).data;
+    } catch (err) {
+      console.error('Error: ', err.response.data.message);
+      return thunkAPI.rejectWithValue(err.response.data.message);
+    }
+  }
+);
+
 export const deletePost = createAsyncThunk(
   'post/deletePost',
   async (postId) => {
@@ -69,14 +112,25 @@ export const postSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPost.pending, (state) => {
-      state.isLoading = true;
+      state.isLoadingPost = true;
     });
     builder.addCase(fetchPost.fulfilled, (state, action) => {
-      state.isLoading = false;
+      state.isLoadingPost = false;
       state.post = action.payload;
     });
     builder.addCase(fetchPost.rejected, (state, action) => {
-      state.isLoading = false;
+      state.isLoadingPost = false;
+      state.error = action.error.message;
+    });
+    builder.addCase(fetchComments.pending, (state) => {
+      state.isLoadingComments = true;
+    });
+    builder.addCase(fetchComments.fulfilled, (state, action) => {
+      state.isLoadingComments = false;
+      state.post.comments = action.payload;
+    });
+    builder.addCase(fetchComments.rejected, (state, action) => {
+      state.isLoadingComments = false;
       state.error = action.error.message;
     });
   },

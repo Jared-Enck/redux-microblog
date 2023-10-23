@@ -1,5 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import PostCard from './PostCard';
+import LoadingSpinner from './LoadingSpinner';
 
 export default function PostList({ titles = [], isLoading, error }) {
   if (error) error;
@@ -22,12 +23,7 @@ export default function PostList({ titles = [], isLoading, error }) {
         ))
       ) : (
         <Grid item>
-          <Typography
-            variant='h5'
-            color={'primary.text'}
-          >
-            Loading...
-          </Typography>
+          <LoadingSpinner />
         </Grid>
       )}
     </Grid>

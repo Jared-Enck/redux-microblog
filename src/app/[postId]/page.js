@@ -16,6 +16,7 @@ import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { fetchPost, deletePost, resetErrors } from '@/redux/reducers/postSlice';
 import { fetchTitles } from '@/redux/reducers/titleSlice';
 import { useRouter } from 'next/navigation';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 export default function PostView() {
   const dispatch = useDispatch();
@@ -31,7 +32,9 @@ export default function PostView() {
     (store) => store.root.postReducer.post,
     shallowEqual
   );
-  const isLoading = useSelector((state) => state.root.postReducer.isLoading);
+  const isLoadingPost = useSelector(
+    (state) => state.root.postReducer.isLoadingPostPost
+  );
   const error = useSelector((state) => state.root.postReducer.error);
 
   const handleClose = () => setOpen(false);
@@ -79,15 +82,8 @@ export default function PostView() {
           }}
           spacing={5}
         >
-          {isLoading || (!post.title && !error) ? (
-            <Typography
-              variant={isSmall ? 'h5' : 'h4'}
-              sx={{
-                textAlign: 'center',
-              }}
-            >
-              Loading...
-            </Typography>
+          {isLoadingPost || (!post.title && !error) ? (
+            <LoadingSpinner />
           ) : error ? (
             <Typography
               variant={isSmall ? 'h5' : 'h4'}
@@ -112,7 +108,7 @@ export default function PostView() {
 
               <Typography sx={{ fontSize: '1.2rem' }}>{post.body}</Typography>
 
-              <CommentList comments={post.comments} />
+              <CommentList />
             </>
           )}
         </Stack>

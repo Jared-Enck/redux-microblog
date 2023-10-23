@@ -1,16 +1,23 @@
 import { Stack, InputLabel } from '@mui/material';
 import useFields from '@/app/hooks/useFields';
 import { StyledInput, PrimaryButton } from '@/app/styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { addComment, fetchComments } from '@/redux/reducers/postSlice';
 
 export default function CommentForm() {
+  const dispatch = useDispatch();
   const initialState = {
     text: '',
   };
   const [formData, handleChange, setFormData] = useFields(initialState);
 
-  const handleSubmit = (e) => {
+  const postId = useSelector((store) => store.root.postReducer.post.id);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData.text);
+    await dispatch(addComment({ postId, payload: { ...formData } }));
+    await dispatch(fetchComments(postId));
     setFormData(initialState);
   };
 

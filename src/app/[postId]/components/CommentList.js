@@ -2,8 +2,13 @@ import React from 'react';
 import { Stack, Divider, Box, Typography } from '@mui/material';
 import CommentItem from './CommentItem';
 import CommentForm from './CommentForm';
+import { useSelector, shallowEqual } from 'react-redux';
 
-export default function CommentList({ comments = [] }) {
+export default function CommentList() {
+  const comments = useSelector(
+    (store) => store.root.postReducer.post.comments,
+    shallowEqual
+  );
   return (
     <Stack spacing={2}>
       <Box>
