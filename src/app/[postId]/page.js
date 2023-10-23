@@ -7,6 +7,7 @@ import {
   Dialog,
   useMediaQuery,
   Stack,
+  Box,
 } from '@mui/material';
 import { useTheme } from '@emotion/react';
 import PostForm from '../components/PostForm';
@@ -83,7 +84,9 @@ export default function PostView() {
           spacing={5}
         >
           {isLoadingPost || (!post.title && !error) ? (
-            <LoadingSpinner />
+            <Box alignSelf={'center'}>
+              <LoadingSpinner />
+            </Box>
           ) : error ? (
             <Typography
               variant={isSmall ? 'h5' : 'h4'}

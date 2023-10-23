@@ -1,18 +1,5 @@
-import { Typography, useMediaQuery } from '@mui/material';
-import { useTheme } from '@emotion/react';
+import { CircularProgress } from '@mui/material';
 
 export default function LoadingSpinner() {
-  const theme = useTheme();
-  const isSmall = useMediaQuery(theme.breakpoints.down('sm'));
-  return (
-    <Typography
-      color={'primary.text'}
-      variant={isSmall ? 'h5' : 'h4'}
-      sx={{
-        textAlign: 'center',
-      }}
-    >
-      Loading...
-    </Typography>
-  );
+  return <CircularProgress sx={{ color: 'primary.lightest' }} />;
 }
