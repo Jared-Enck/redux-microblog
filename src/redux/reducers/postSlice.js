@@ -9,13 +9,17 @@ const initialState = {
   error: null,
 };
 
-export const fetchPost = createAsyncThunk('post/fetchPost', async (postId) => {
-  try {
-    return (await axios(`${BASE_URL}/api/posts/${postId}`)).data;
-  } catch (err) {
-    console.error(err.response.data.message);
+export const fetchPost = createAsyncThunk(
+  'post/fetchPost',
+  async (postId, thunkAPI) => {
+    try {
+      return (await axios.get(`${BASE_URL}/api/posts/${postId}`)).data;
+    } catch (err) {
+      console.error('Error: ', err.response.data.message);
+      return thunkAPI.rejectWithValue(err.response.data.message);
+    }
   }
-});
+);
 
 export const savePost = createAsyncThunk('post/addPost', async (post) => {
   try {
@@ -51,6 +55,14 @@ export const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {
+    updatePost: (state, action) => {
+      for (let key in action.payload) {
+        state.post[key] = action.payload[key];
+      }
+    },
+    resetErrors: (state) => {
+      state.error = null;
+    },
     default: (state) => {
       return state;
     },
@@ -65,10 +77,11 @@ export const postSlice = createSlice({
     });
     builder.addCase(fetchPost.rejected, (state, action) => {
       state.isLoading = false;
-      console.log('error');
       state.error = action.error.message;
     });
   },
 });
+
+export const { updatePost, resetErrors } = postSlice.actions;
 
 export default postSlice.reducer;
