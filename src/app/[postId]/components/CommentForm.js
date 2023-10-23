@@ -15,7 +15,6 @@ export default function CommentForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData.text);
     await dispatch(addComment({ postId, payload: { ...formData } }));
     await dispatch(fetchComments(postId));
     setFormData(initialState);
