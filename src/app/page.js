@@ -8,16 +8,16 @@ import { fetchTitles } from '@/redux/reducers/titleSlice';
 export default function Home() {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchTitles());
-  }, [dispatch]);
-
   const titles = useSelector(
     (store) => store.root.titleReducer.titles,
     shallowEqual
   );
   const isLoading = useSelector((state) => state.root.titleReducer.isLoading);
   const error = useSelector((state) => state.root.titleReducer.error);
+
+  useEffect(() => {
+    if (!titles.length) dispatch(fetchTitles());
+  }, [dispatch]);
 
   return (
     <Container maxWidth='lg'>
