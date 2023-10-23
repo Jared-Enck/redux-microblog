@@ -9,9 +9,17 @@ const initialState = {
   error: null,
 };
 
-export const fetchTitles = createAsyncThunk('titles/fetchTitles', async () => {
-  return (await axios(`${BASE_URL}/api/posts`)).data;
-});
+export const fetchTitles = createAsyncThunk(
+  'titles/fetchTitles',
+  async (thunkAPI) => {
+    try {
+      return (await axios(`${BASE_URL}/api/posts`)).data;
+    } catch (err) {
+      console.error(err.response.data.message);
+      return thunkAPI.rejectWithValue(err.response.data.message);
+    }
+  }
+);
 
 export const titleSlice = createSlice({
   name: 'titles',
