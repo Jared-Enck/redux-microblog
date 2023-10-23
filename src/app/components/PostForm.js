@@ -7,9 +7,10 @@ import { theme } from '../theme';
 import { StyledInput, PrimaryButton } from '../styled';
 import useFields from '../hooks/useFields';
 import { useDispatch } from 'react-redux';
-import { editPost, savePost } from '@/redux/reducers/postSlice';
+import { editPost, savePost, updatePost } from '@/redux/reducers/postSlice';
 import getPostChanges from '../helpers/getPostChanges';
 import { useRouter } from 'next/navigation';
+import { fetchTitles } from '@/redux/reducers/titleSlice';
 
 const CancelButton = styled(Button)(({ theme }) => ({
   color: theme.palette.primary.lightest,
@@ -25,7 +26,11 @@ export default function PostForm({ type = 'New', setOpen, postData }) {
   const dispatch = useDispatch();
   const { push } = useRouter();
   const initialState = postData
-    ? postData.post
+    ? {
+        title: postData.post.title,
+        description: postData.post.description,
+        body: postData.post.body,
+      }
     : {
         title: '',
         description: '',
@@ -37,10 +42,11 @@ export default function PostForm({ type = 'New', setOpen, postData }) {
     setOpen(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (type === 'New') {
-      dispatch(savePost(formData)).then(() => push('/'));
+      await dispatch(savePost(formData));
+      await dispatch(fetchTitles());
       push('/');
     } else {
       const { postId, post } = postData;
@@ -48,6 +54,7 @@ export default function PostForm({ type = 'New', setOpen, postData }) {
       if (changes) {
         const payload = { postId, changes: formData };
         dispatch(editPost(payload));
+        dispatch(updatePost(formData));
       }
       handleClose();
     }
