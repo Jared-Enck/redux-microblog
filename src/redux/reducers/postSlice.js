@@ -83,6 +83,18 @@ export const deleteComment = createAsyncThunk(
   }
 );
 
+export const updateVotes = createAsyncThunk(
+  'post/updateVotes',
+  async ({ postId, delta }) => {
+    try {
+      return (await axios.post(`${BASE_URL}/api/posts/${postId}/vote/${delta}`))
+        .data;
+    } catch (err) {
+      console.error(err.response.data.message);
+    }
+  }
+);
+
 export const deletePost = createAsyncThunk(
   'post/deletePost',
   async (postId) => {
@@ -102,6 +114,12 @@ export const postSlice = createSlice({
       for (let key in action.payload) {
         state.post[key] = action.payload[key];
       }
+    },
+    upVote: (state) => {
+      state.post.votes += 1;
+    },
+    downVote: (state) => {
+      state.post.votes -= 1;
     },
     resetErrors: (state) => {
       state.error = null;
@@ -136,6 +154,6 @@ export const postSlice = createSlice({
   },
 });
 
-export const { updatePost, resetErrors } = postSlice.actions;
+export const { updatePost, upVote, downVote, resetErrors } = postSlice.actions;
 
 export default postSlice.reducer;

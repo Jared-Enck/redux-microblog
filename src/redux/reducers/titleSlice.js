@@ -13,7 +13,8 @@ export const fetchTitles = createAsyncThunk(
   'titles/fetchTitles',
   async (thunkAPI) => {
     try {
-      return (await axios(`${BASE_URL}/api/posts`)).data;
+      const { data } = await axios(`${BASE_URL}/api/posts`);
+      return data.sort((a, b) => a.votes - b.votes).reverse();
     } catch (err) {
       console.error(err.response.data.message);
       return thunkAPI.rejectWithValue(err.response.data.message);
