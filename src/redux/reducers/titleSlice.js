@@ -26,6 +26,57 @@ export const titleSlice = createSlice({
   name: 'titles',
   initialState,
   reducers: {
+    updateTitle: (state, action) => {
+      const found = titles.filter(
+        (t) => t.id === Number(action.payload.postId)
+      );
+      found[0].title = action.payload.changes.title;
+      found[0].description = action.payload.changes.description;
+    },
+    updateTitleVotes: (state, action) => {
+      let currentIdx;
+      const titles = state.titles;
+      titles.filter((t, idx) => {
+        if (t.id === Number(action.payload.postId)) {
+          currentIdx = idx;
+        }
+      });
+      action.payload.delta === 'up'
+        ? (titles[currentIdx].votes += 1)
+        : (titles[currentIdx].votes -= 1);
+
+      const currentVotes = titles[currentIdx].votes;
+
+      if (titles[currentIdx - 1]) {
+        if (titles[currentIdx - 1].votes < currentVotes) {
+          for (let i = currentIdx; i > 0; i--) {
+            if (titles[i - 1]) {
+              if (titles[i - 1].votes < currentVotes) {
+                const temp = titles[i - 1];
+                titles[i - 1] = titles[i];
+                titles[i] = temp;
+              }
+            }
+          }
+        }
+      }
+      if (titles[currentIdx + 1]) {
+        if (titles[currentIdx + 1].votes > currentVotes) {
+          for (let i = currentIdx; i < titles.length; i++) {
+            if (titles[i + 1]) {
+              if (titles[i + 1].votes > currentVotes) {
+                const temp = titles[i + 1];
+                titles[i + 1] = titles[i];
+                titles[i] = temp;
+              }
+            }
+          }
+        }
+      }
+    },
+    removeTitle: (state, action) => {
+      titles.filter((t) => t.id !== action.payload);
+    },
     default: (state) => {
       return state;
     },
@@ -44,5 +95,8 @@ export const titleSlice = createSlice({
     });
   },
 });
+
+export const { updateTitle, updateTitleVotes, removeTitle } =
+  titleSlice.actions;
 
 export default titleSlice.reducer;
