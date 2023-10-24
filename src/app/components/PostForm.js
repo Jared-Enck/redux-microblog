@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 import { editPost, savePost, updatePost } from '@/redux/reducers/postSlice';
 import getPostChanges from '../helpers/getPostChanges';
 import { useRouter } from 'next/navigation';
-import { fetchTitles } from '@/redux/reducers/titleSlice';
+import { fetchTitles, updateTitle } from '@/redux/reducers/titleSlice';
 
 const CancelButton = styled(Button)(({ theme }) => ({
   color: theme.palette.primary.lightest,
@@ -55,6 +55,7 @@ export default function PostForm({ type = 'New', setOpen, postData }) {
         const payload = { postId, changes: formData };
         dispatch(editPost(payload));
         dispatch(updatePost(formData));
+        dispatch(updateTitle(payload));
       }
       handleClose();
     }
