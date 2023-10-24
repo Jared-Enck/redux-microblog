@@ -5,7 +5,7 @@ import {
   IconButton,
   ListItemText,
 } from '@mui/material';
-import { DeleteForever } from '@mui/icons-material';
+import { Clear } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteComment, fetchComments } from '@/redux/reducers/postSlice';
 
@@ -25,9 +25,9 @@ export default function CommentItem({ comment }) {
       </ListItemText>
       <ListItemIcon sx={{ justifyContent: 'right' }}>
         <IconButton onClick={() => handleDeleteClick(comment.id)}>
-          <DeleteForever
+          <Clear
             sx={{
-              color: 'primary.text',
+              color: 'primary.main',
               '&:hover': { color: 'error.main' },
             }}
           />
