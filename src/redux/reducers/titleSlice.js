@@ -27,11 +27,12 @@ export const titleSlice = createSlice({
   initialState,
   reducers: {
     updateTitle: (state, action) => {
-      const found = titles.filter(
-        (t) => t.id === Number(action.payload.postId)
-      );
-      found[0].title = action.payload.changes.title;
-      found[0].description = action.payload.changes.description;
+      state.titles.filter((t) => {
+        if (t.id === Number(action.payload.postId)) {
+          t.title = action.payload.changes.title;
+          t.description = action.payload.changes.description;
+        }
+      });
     },
     updateTitleVotes: (state, action) => {
       let currentIdx;
@@ -75,7 +76,7 @@ export const titleSlice = createSlice({
       }
     },
     removeTitle: (state, action) => {
-      titles.filter((t) => t.id !== action.payload);
+      state.titles.filter((t) => t.id !== action.payload);
     },
     default: (state) => {
       return state;
