@@ -15,7 +15,7 @@ import PostHeader from './components/PostHeader';
 import CommentList from './components/CommentList';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { fetchPost, deletePost, resetErrors } from '@/redux/reducers/postSlice';
-import { fetchTitles } from '@/redux/reducers/titleSlice';
+import { removeTitle } from '@/redux/reducers/titleSlice';
 import { useRouter } from 'next/navigation';
 import LoadingSpinner from '../components/LoadingSpinner';
 
@@ -42,7 +42,7 @@ export default function PostView() {
 
   const handleDelete = async () => {
     await dispatch(deletePost(postId));
-    await dispatch(fetchTitles());
+    await dispatch(removeTitle(postId));
     push('/');
   };
 
@@ -103,6 +103,7 @@ export default function PostView() {
                   postId,
                   title: post.title,
                   description: post.description,
+                  votes: post.votes,
                 }}
                 isSmall={isSmall}
                 setOpen={setOpen}
