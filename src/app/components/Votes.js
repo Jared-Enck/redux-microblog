@@ -1,15 +1,24 @@
 import { Stack, Typography, IconButton } from '@mui/material';
 import { ThumbUp, ThumbDown } from '@mui/icons-material';
-import { useDispatch } from 'react-redux';
-import { updateVotes } from '@/redux/reducers/postSlice';
-import { fetchTitles } from '@/redux/reducers/titleSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateVotes, upVote, downVote } from '@/redux/reducers/postSlice';
+import { updateTitleVotes } from '@/redux/reducers/titleSlice';
 
 export default function Votes({ postId, votes }) {
   const dispatch = useDispatch();
 
+  const currentPostId = useSelector((store) => store.root.postReducer.post.id);
+
   const handleClick = async (delta) => {
     await dispatch(updateVotes({ postId, delta }));
-    dispatch(fetchTitles());
+    if (currentPostId === Number(postId)) {
+      const actions = {
+        up: upVote(),
+        down: downVote(),
+      };
+      dispatch(actions[delta]);
+    }
+    dispatch(updateTitleVotes({ postId, delta }));
   };
 
   return (
