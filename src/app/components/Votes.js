@@ -1,7 +1,17 @@
 import { Stack, Typography, IconButton } from '@mui/material';
 import { ThumbUp, ThumbDown } from '@mui/icons-material';
+import { useDispatch } from 'react-redux';
+import { updateVotes } from '@/redux/reducers/postSlice';
+import { fetchTitles } from '@/redux/reducers/titleSlice';
 
-export default function Votes({ handleClick, votes }) {
+export default function Votes({ postId, votes }) {
+  const dispatch = useDispatch();
+
+  const handleClick = async (delta) => {
+    await dispatch(updateVotes({ postId, delta }));
+    dispatch(fetchTitles());
+  };
+
   return (
     <Stack
       direction={'row'}

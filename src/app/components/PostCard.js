@@ -1,19 +1,10 @@
 import React from 'react';
 import Link from 'next/link';
 import { Card, CardActionArea, CardActions, CardHeader } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import { updateVotes } from '@/redux/reducers/postSlice';
-import { fetchTitles } from '@/redux/reducers/titleSlice';
 import Votes from './Votes';
 
 export default function PostCard({ post }) {
-  const dispatch = useDispatch();
   const { id, title, description, votes } = post;
-
-  const handleClick = async (delta) => {
-    await dispatch(updateVotes({ postId: id, delta }));
-    dispatch(fetchTitles());
-  };
 
   return (
     <Card
@@ -41,7 +32,7 @@ export default function PostCard({ post }) {
       </CardActionArea>
       <CardActions>
         <Votes
-          handleClick={handleClick}
+          postId={id}
           votes={votes}
         />
       </CardActions>
